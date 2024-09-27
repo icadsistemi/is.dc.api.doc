@@ -6,7 +6,7 @@ on:
 
 jobs:
   api-doc-deploy:
-    name: Deploy API POS doc on Bump
+    name: Deploy Data Collection API doc on Bump
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
