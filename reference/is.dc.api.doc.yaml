@@ -1,0 +1,2673 @@
+openapi: 3.0.1
+x-stoplight:
+  id: krh66vg93qzo4
+info:
+  title: mxp-datacollection-v2
+  description: New DataCollection V2 Rest API - Public API
+  version: '1.0'
+servers:
+  - url: 'https://mxp-datacollection-api.prod.icadsistemi.com/api/v2'
+    description: production
+  - url: 'https://mxp-datacollection-api.dev.icadsistemi.com/api/v2'
+    description: development
+paths:
+  /totalizers:
+    post:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: 2wmy1ew3cii5f
+      summary: Add Totalizers data
+      operationId: post-totalizers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Totalizer'
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+      description: 'API used to add totalizers data. It uses the Turn ID to decide whatever it''s a day totalizer or a turn totalizer. If the totalizer doesn''t exists on Overview Database, it will be created.'
+  /manage/prices:
+    get:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  generated_at:
+                    type: string
+                    x-stoplight:
+                      id: ehg77vroqeznz
+                    description: The date when the prices are generated
+                  prices:
+                    type: array
+                    x-stoplight:
+                      id: j34ivt9ilm7ls
+                    items:
+                      x-stoplight:
+                        id: uc7gaszwy93gw
+                      type: object
+                      properties:
+                        product_code:
+                          type: integer
+                          x-stoplight:
+                            id: w1hbtdrw7a59k
+                          description: The product linked to that price
+                        price:
+                          type: number
+                          x-stoplight:
+                            id: w0oyfsz3m1qux
+                          description: The price to activate
+                        price_level:
+                          type: integer
+                          x-stoplight:
+                            id: aje45ot5gdi3r
+                          description: 'The level (es. Self) where we activate that price, in number format [1,8]'
+                        trace_id:
+                          type: string
+                          x-stoplight:
+                            id: ab7nf9ao0fodu
+                          description: An unique ID (UUID) used to trace the price change.
+                        validity_start:
+                          type: string
+                          x-stoplight:
+                            id: pvvksy4b6wmfc
+                          description: The date when the prices needs to be activated
+        '204':
+          description: No Content
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Def-ModCheckPrices-Response'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Def-ModCheckPrices-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Def-ModCheckPrices-Response'
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: nlaec9k3vktfl
+      requestBody:
+        content: {}
+      summary: Get Prices for FuelStation
+      operationId: get-manage-prices
+      description: API to retrieve the prices to activate on the FuelStation. The ISCode of FuelStation is read from the token
+    put:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Def-ModCheckPrices-Response'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Def-ModCheckPrices-Response'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Def-ModCheckPrices-Response'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Def-ModCheckPrices-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Def-ModCheckPrices-Response'
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: 3u7gg2lqffbup
+      summary: Update Prices Status
+      operationId: put-manage-prices
+      description: API used to update the status of the prices sent from Overview and activated on the FuelStation. The ISCode of FuelStation is read from the token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                prices:
+                  type: array
+                  x-stoplight:
+                    id: xdwd1hf5g5591
+                  items:
+                    x-stoplight:
+                      id: jpx92nmgf3gvr
+                    type: object
+                    properties:
+                      start:
+                        type: string
+                        x-stoplight:
+                          id: 9lh5m6tebyhvm
+                        description: The date when the prices needs to be activated. (The same as validity start in the GET)
+                      new_status:
+                        type: string
+                        x-stoplight:
+                          id: y1bfgaszmv6gl
+                        description: |
+                          The new status of the price, it could be one of these string:
+                          - ADDED
+                          - SENT
+                          - RECEIVED
+                          - SCHEDULED
+                          - ACTIVATED
+                          - ERROR
+
+                          Everything else will be treated as error.
+  /startup/products:
+    post:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/Product'
+        '404':
+          description: Not Found. Deprecated in newer versions
+        '422':
+          description: Unprocessable Entity (WebDAV)
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: gt3b2wtt6ppx2
+      summary: Get Product informations
+      operationId: post-startup-products
+      description: API to retrive products informations. It takes a body with a dictionary string/string taking the ID of the product as key and the PC Description as value. The response is a dictionary with the same key but with the object product as value.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                x-stoplight:
+                  id: omklwj5phk7gb
+                type: string
+  '/remains/{remain_code}':
+    get:
+      parameters:
+        - name: remain_code
+          in: path
+          required: true
+          schema:
+            type: string
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/Remain'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: lonm4c1ddvfub
+      summary: Get Remain Code
+      operationId: get-remain-code
+      description: API to retrieve the remains associated to a specific remain code. It takes as input the remain code as path parameters and the ISCode from the token or the header.
+  /startup/logs:
+    get:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  key:
+                    type: string
+                x-examples:
+                  Example 1:
+                    key: aaaaabbbbb123452148vnivososooooo
+        '401':
+          description: 401 response
+          content: {}
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: lmml06f2wul3h
+      operationId: get-startup-logs
+      summary: Get Log API Key
+      description: API used to retrieve DataDog API Key
+  /startup/pumps:
+    get:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pumps:
+                    type: object
+                    x-stoplight:
+                      id: p8o1hab0q7d2q
+                    additionalProperties:
+                      x-stoplight:
+                        id: 21frj1ivongd4
+                      type: object
+                      additionalProperties:
+                        $ref: '#/components/schemas/Pumps'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: nhlwl13byha68
+      summary: Get All Pumps
+      operationId: get-pumps
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+      description: API used to retrieve all pumps linked to a FuelStation. The ISCode is taken from the token or from the header.
+    post:
+      responses:
+        '200':
+          description: '200 response. The body is a dictionary of pumps_id/nozzle_id/PumpObject. '
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  x-stoplight:
+                    id: ovotsz9it0gj3
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Pumps'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: cphemes8h608m
+      summary: Send Pumps
+      operationId: post-pumps
+      description: 'API to send pumps to Overview Database, in order to create them and receive the ID of the pump useful for supply and other analysis.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                x-stoplight:
+                  id: a2pp5gwvn3l4h
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/Pumps'
+        description: 'The body is a dictionary of pumps_id/nozzle_id/PumpObject. '
+  '/startup/pumps/{pump_id}/nozzle/{nozzle_id}/product/{product_id}':
+    get:
+      parameters:
+        - name: pump_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: nozzle_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: product_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pump_ov_id:
+                    type: integer
+                    x-stoplight:
+                      id: yljyeob7y015i
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: oi3yuhe1qej9f
+      operationId: get-pump-id
+      summary: Get Pump ID
+      description: 'API used to retrieve the Overview ID of a pump linked to a FuelStation given its number, the nozzle ID and the product ID. The ISCode is taken from the token or from the header.'
+  /startup/internationalcards:
+    get:
+      responses:
+        '200':
+          description: 200 response
+          content: {}
+        '401':
+          description: 401 response
+          content: {}
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: 7a000fieyxkcu
+      operationId: get-int-cards
+      summary: Get Cards IIN
+      deprecated: true
+      description: OLD API to retrieve cards' IINs in order to match them to the right issuer. Replaced by /cards because now it also contains cards that are not international.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/Cards'
+  /supplies:
+    post:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response-200'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response-401'
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+      x-stoplight:
+        id: eq0iwn291u3iw
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/Supply'
+        description: The body is a key/value dictionary where the key is the ID of the supply.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+      summary: Send Supply
+      operationId: ''
+      description: Send supplies to save on Overview Database
+      security:
+        - Cognito: []
+  /self/empty:
+    post:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: yo7zf1yonip2y
+      summary: Add Self informations
+      operationId: post-self
+      description: 'API used to add information about self''s operation like cash in (money added) or empty self (money removed). '
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Self'
+  /alarms:
+    post:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: tt9tfii7iw9sg
+      operationId: post-alarm
+      summary: Send Alarms
+      description: API used to send alarm from the FuelStation
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Alarm'
+  /remains:
+    post:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: fpc5lgokt0958
+      summary: Create remains
+      operationId: post-remains
+      description: API used to create remains informations or update them with a refund
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/Remain'
+        description: The body is a key/value dictionary where the key is the ID of the remain
+  /startup/informations:
+    get:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Startup-Informations'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: sif76xthdbeya
+      summary: Get FuelStation Informations
+      operationId: get-final-informations
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+      description: API used to retrieve various informations about the FuelStation. It reads the FuelStation's code from token or the header x-fuelstation-code.
+  /manage/whattodo:
+    get:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/WhatToDo'
+        '401':
+          description: 401 response
+          content: {}
+        '403':
+          description: 403 response
+          content: {}
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: u7cqiw2srxa2r
+      summary: Get Whattodo File
+      operationId: get-whattodo
+      description: 'API to retrieve the "what-to-do" file. It''s a JSON on our block storage with the name {iscode}.json. The ISCode is read from the authentication token.'
+  /closes/day:
+    post:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+      x-stoplight:
+        id: 6q8pbofh07pak
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Closes'
+        description: The body is an array of closes to add
+      description: API to add a day closes to the Overview Database.
+      operationId: post-day-closes
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+      summary: Create a day close
+      security:
+        - Cognito: []
+  /prices:
+    post:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: xnzn6ldh606w2
+      operationId: post-price
+      summary: Add Price informations
+      description: 'API used to send informations about price change, also used to send those informations to Italian Government.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/Price'
+  /startup/cards:
+    get:
+      responses:
+        '200':
+          description: 200 response
+          content: {}
+        '401':
+          description: 401 response
+          content: {}
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: tai9hwmav17ln
+      summary: Get Cards IIN
+      operationId: get-cards
+      description: API to retrieve cards' IINs in order to match them to the right issuer.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/Cards'
+  /fuelstations:
+    get:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  x-stoplight:
+                    id: wf3ta79dn39vp
+                  type: object
+                  properties:
+                    is_code:
+                      type: string
+                      x-stoplight:
+                        id: mb3kr9yc1lwj4
+                    host:
+                      type: string
+                      x-stoplight:
+                        id: 8mkk1d1y5t4x4
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: f43q8gcyft7y9
+      summary: Get FuelStation List
+      operationId: get-fuelstations
+      description: Get the FuelStation List based on automation. It automatically filter the automation when the login username is one of our microservices.
+      requestBody:
+        content: {}
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: automation
+  /totalizers/midnight:
+    post:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: dnb7lpf3om3qd
+      summary: Add Midnight Totalizers Data
+      operationId: post-midnight-totalizers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Totalizer'
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+      description: 'API used to add midnight closes'' totalizers data. If the totalizer doesn''t exists on Overview Database, it will be created.'
+  /closes/day/midnight:
+    post:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: 56flerq4oc2wv
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Closes'
+        description: The body is an array of closes to add
+      description: API to add a midnight closes to the Overview Database.
+      operationId: post-midnight-closes
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+      summary: Create a midnight close
+  /health:
+    head:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                x-examples:
+                  Example 1:
+                    statusCode: 200
+      x-stoplight:
+        id: v3s5g79bzmqol
+      summary: Health Check
+      operationId: head-health
+      description: |-
+        API without security check just for checking connection with the API Server.
+
+        No body is requested
+  /supplies/paid:
+    get:
+      responses:
+        '200':
+          description: 200 response. The body is a key/value dictionary where the key is the ID of the supply.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/Supply'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+      x-stoplight:
+        id: t2w5lpn1drte4
+      summary: Get Paid Supplies
+      description: |-
+        API used to retrieve supplies paid with our POS. It reads the ISCODE used as input from the cognito token.
+
+        The output, if everything is okay, is the same map of supplies sent in the /supplies POST. 
+      security:
+        - Cognito: []
+  /prices/history:
+    post:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: h0v40t2nvxlfp
+      operationId: post-price-history
+      summary: Add Price History informations
+      description: API used to send informations about price changes and store them in an historical order.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/PriceValues'
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+  /manage/configuration:
+    post:
+      responses:
+        '200':
+          description: 200 response
+          content: {}
+        '401':
+          description: 401 response
+          content: {}
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: madlv757508jm
+      summary: Send Configuration
+      operationId: post-configuration
+      description: It saves the configuration of the FuelStation as a JSON on our block storage. The object name will be the ISCode read in the token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+        description: It accepts every json
+  /tanks:
+    post:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: 2b0x7rc6eh475
+      operationId: post-tanks
+      summary: Add Tanks informations
+      description: 'API used to send tanks'' informations. If the tank doesn''t exists on Overview Database, it will be created.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/Tank'
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+  /closes/turn:
+    post:
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '500':
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/API-GW-Def-Response'
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: 5lw9frmk82ts4
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Closes'
+        description: The body is an array of closes to add
+      operationId: post-turn-closes
+      summary: Create a turn close
+      description: API to add a turn closes to the Overview Database.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+components:
+  securitySchemes:
+    Cognito:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: ''
+          refreshUrl: ''
+          scopes: {}
+  schemas:
+    Supply:
+      type: object
+      x-examples:
+        Example 1:
+          '424242':
+            transaction_id: 404092
+            date: '2024-09-07T14:16:00+01:00'
+            pump_id: 4
+            nozzle_id: 2
+            pump_ovid: 12345
+            product_id: 1
+            product_desc: Verde
+            amount: 26.45
+            volume: 14.32
+            unit_price: 1.847
+            payments:
+              - payment_mode: CONTANTE
+                card_name: BANCONOTE
+                amount: 26.45
+                data: '2024-09-07T14:16:00+01:00'
+            operative_mode: FAIDATE
+            price_level: SELF
+            device_type: PUMAPRO
+            electronic_totalizer: 1117356
+            actual_totalizer: 1117356
+            ticket_id: 235849
+            paid_supply_payment_date: '0001-01-01T00:00:00Z'
+            stp_debug: true
+            connection_date: '2024-09-08T03:08:44.15625+01:00'
+      title: Supply Input
+      required:
+        - transaction_id
+        - date
+        - pump_id
+        - nozzle_id
+        - product_id
+        - pump_ovid
+        - product_desc
+        - amount
+        - volume
+        - unit_price
+        - operative_mode
+        - price_level
+        - device_type
+        - electronic_totalizer
+        - actual_totalizer
+        - ticket_id
+        - opt_id
+      properties:
+        transaction_id:
+          type: integer
+          description: 'The transaction refers to the payment ID, in some cases it can be the same as supplyID'
+        date:
+          type: string
+          description: Date of supply
+        pump_id:
+          type: integer
+          description: |
+            This is the pump id on the fuelstation, it's a small integer, usually between 1-15
+        nozzle_id:
+          type: integer
+          description: 'This is the nozzle id on the fuelstation, every pump has a set of linked nozzle. It''s a small integer, usually between 0-5'
+        product_id:
+          type: integer
+          description: |
+            The product ID is the internal ID of Overview, read at startup from /startup/products
+        pump_ovid:
+          type: integer
+          description: |
+            This is an internal ID read from the request startup/pumps that matches the combination fuelstation-pump-nozzle-product
+        product_desc:
+          type: string
+          description: |
+            This is the name of the product on the fuelstation
+        amount:
+          type: number
+          description: Total amount of supply
+        volume:
+          type: number
+          description: Total volume of supply
+        payments:
+          type: array
+          description: |
+            Array of payments
+          items:
+            type: object
+            properties:
+              payment_mode:
+                type: string
+                description: Description of Payment Mode
+              card_name:
+                type: string
+                description: |
+                  Description of the card name
+              card_pan:
+                type: string
+                x-stoplight:
+                  id: hebi5q690z7ft
+                description: PAN of the card used for payment
+              authorization_code:
+                type: string
+                x-stoplight:
+                  id: fq041f3xwhy6r
+                description: Authorization Code for the transaction with credit card payments
+              authorization_id:
+                type: string
+                x-stoplight:
+                  id: fgfi09xvsiooy
+                description: Authorization ID for the transaction with credit card payments
+              terminal_id:
+                type: integer
+                x-stoplight:
+                  id: 4lm82ip7b8b1y
+                description: |
+                  The ID of the terminal used for the payment
+              stan_code:
+                type: string
+                x-stoplight:
+                  id: y7auo45yum5pi
+                description: |
+                  System Trace Audit Number (STAN) Code of the payment (used when we have a credit card payment)
+              amount:
+                type: number
+                description: Amount of single payment
+              data:
+                type: string
+                description: Date of payment
+              transaction_id:
+                type: integer
+                x-stoplight:
+                  id: 5i4bvvcl83w4a
+                description: 'Usually the same TransactionID used in the supply. Sometimes it could be different between multiple payments, so we include in it'
+              counted:
+                type: boolean
+                x-stoplight:
+                  id: xnwd4d2mk5zqe
+                description: |
+                  Internal boolean used to rule out some payments from some analysis
+              in_out:
+                type: boolean
+                x-stoplight:
+                  id: nlrt9kodieisc
+                description: Boolean used to understand if the payment was indoor or outdoor.
+        unit_price:
+          type: number
+          description: 'Unit Price for the product, usually for 1 liter or kilo.'
+        operative_mode:
+          type: string
+          description: This refers to the operative mode on the fuelstation during the supply (es. Self)
+        price_level:
+          type: string
+          description: 'We can have different price level on the fuelstation, based also on operative mode.'
+        device_type:
+          type: string
+          description: The device used to start the supply
+        electronic_totalizer:
+          type: integer
+          description: The Electronic Totalizer value at the end of the supply
+        actual_totalizer:
+          type: integer
+          description: The Mechanical Totalizer value at the end of the supply
+        ticket_id:
+          type: integer
+          description: The ID of the ticket printed to the customer
+        opt_id:
+          type: integer
+          x-stoplight:
+            id: z1ffzyvsonl2b
+          description: The ID of the terminal used to start the supply
+        pre_amount:
+          type: number
+          x-stoplight:
+            id: sfd06vfw6y98s
+          description: 'The PreAmount is the amount that the supply should reach. '
+        remain:
+          type: number
+          x-stoplight:
+            id: 23f22mfby8crx
+          description: 'If the supply has a remain, we put it''s amount in this field'
+        checked:
+          type: boolean
+          x-stoplight:
+            id: 1ui0ohuambt5h
+          description: Internal boolean used to rule out the supply from some analysis
+        paid_supply:
+          type: boolean
+          x-stoplight:
+            id: cmlxlteuuoprs
+          description: Internal Boolean to understand if the supply was paid with our PAX POS
+        paid_supply_payment_date:
+          type: string
+          description: 'Date of the payment made from our PAX POS '
+        paid_with_card:
+          type: boolean
+          x-stoplight:
+            id: 66rmfri49ydq1
+          description: Boolean used to understand if the supply was paid with credit card
+        status:
+          type: integer
+          x-stoplight:
+            id: zavyqpqrdn3lz
+          description: Status of the supply (es. 1 means that the payment is not confirmed)
+        stp_debug:
+          type: boolean
+          description: Debug boolean to understand what flow of analysis was used
+        stc_debug:
+          type: boolean
+          x-stoplight:
+            id: czcx30odr5swj
+          description: Debug boolean to understand what flow of analysis was used
+        anomaly:
+          type: boolean
+          x-stoplight:
+            id: 75ugpnl0at6u9
+          description: |
+            Boolean (deprecated) used to understand if the supply was anomalous. Now we use Status = 2 or 3.
+        connection_date:
+          type: string
+          description: Date when the supply is read
+    Remain:
+      type: object
+      x-examples:
+        Example 1:
+          '240402':
+            real_ticket_id: 37603
+            date: '2024-06-27T13:59:57+02:00'
+            opt_id: 1
+            pre_amount: 20
+            amount: 11.95
+            remain: 8.05
+            product_id: 1
+            product_desc: Verde
+            remain_supply_id: 90274
+            refund_mode: DA RIMBORSARE
+            refund_date: '1970-01-01T01:00:00+01:00'
+            expiration_date: '2024-09-25T13:59:57+02:00'
+      properties:
+        real_ticket_id:
+          type: integer
+          description: The ID showed on customer's ticket.
+        date:
+          type: string
+          description: The date when the remain was issued.
+        opt_id:
+          type: integer
+          description: The ID of the OPT used to authorize the transaction
+        pre_amount:
+          type: integer
+          description: The predeterminated amount of the supply
+        amount:
+          type: number
+          description: The amount of the supply that created the remain
+        remain:
+          type: number
+          description: The amount of the remain
+        product_id:
+          type: integer
+          description: The ID of the product used in the supply that created the remain
+        product_desc:
+          type: string
+          description: The description of the product used in the supply that created the remain
+        remain_supply_id:
+          type: integer
+          description: ID of the supply linked to the remain
+        refund_mode:
+          type: string
+          description: The description on how the remain was refunded.
+        refund_date:
+          type: string
+          description: The date when the refund was issued.
+        expiration_date:
+          type: string
+          description: The Date when the remain will be expired and it will not be possible to refund it anymore
+    Closes:
+      type: object
+      x-examples:
+        Example 1:
+          start_date: ''
+      required:
+        - start_date
+        - end_date
+        - date_close
+      properties:
+        start_date:
+          type: string
+          description: Start Date of the Close.
+        end_date:
+          type: string
+          x-stoplight:
+            id: d2xo6e3iyz4xr
+          description: End Date of the close.
+        date_close:
+          type: string
+          x-stoplight:
+            id: w372zle02vbbh
+          description: |
+            It represents the date of the close.
+
+            Example:
+            If the close starts at 23:59 of the day X, the date close will surely be X+1
+        day_id:
+          type: string
+          x-stoplight:
+            id: dzwd03qzerehs
+          description: The Day ID on the FuelStation.
+        turn_id:
+          type: string
+          x-stoplight:
+            id: 0f9lbi8v46zi5
+          description: The Turn ID on the FuelStation.
+        turns_count:
+          type: string
+          x-stoplight:
+            id: dfp9d91rcu5on
+          description: The turns count in the day.
+      title: Closes Values
+    Tank:
+      type: object
+      x-examples:
+        Example 1:
+          '1':
+            id_product: SP
+            product_description: Verde
+            id_product_ov: 1
+            capacity: 23621.74951171875
+            volume: 7241.87451171875
+            volume_comp: 7224.39208984375
+            missing_liquid: 16379.875
+            product_level: 751.6300048828125
+            temperature: 22.200000762939453
+            last_check: '2024-09-19T03:51:07.4375+02:00'
+          '2':
+            id_product: KD
+            product_description: Not Avaiable
+            id_product_ov: 4
+            capacity: 24864.999084472656
+            volume: 708.6494750976562
+            volume_comp: 706.3327026367188
+            missing_liquid: 24156.349609375
+            product_level: 151.57000732421875
+            water_level: 0.5100002288818359
+            water_volume: 1.3770005702972412
+            temperature: 24
+            last_check: '2024-09-19T03:51:07.4375+02:00'
+          '3':
+            id_product: GG
+            product_description: Diesel
+            id_product_ov: 2
+            capacity: 24865
+            volume: 14927.3701171875
+            volume_comp: 14899.26953125
+            missing_liquid: 9937.6298828125
+            product_level: 1301.8199462890625
+            temperature: 22.299999237060547
+            last_check: '2024-09-19T03:51:07.4375+02:00'
+          '4':
+            id_product: GP
+            product_description: GPL
+            id_product_ov: 6
+            capacity: 24865
+            volume: 9385.671875
+            volume_comp: 9360.4462890625
+            missing_liquid: 15479.328125
+            product_level: 908.7999877929688
+            temperature: 21.100000381469727
+            last_check: '2024-09-19T03:51:07.4375+02:00'
+          '5':
+            id_product: AD
+            product_description: AdBlue
+            id_product_ov: 5
+            capacity: 4000
+            volume: -60303.35
+            last_check: '2024-09-19T03:51:07.453125+02:00'
+      properties:
+        tank_id:
+          type: object
+          x-stoplight:
+            id: ygdf0bnr8hsj9
+          description: 'A number, used as key in a map of integers. It represents the ID of the tank (es. 1)'
+          properties:
+            id_product:
+              type: string
+              description: ID of the product on FuelStation
+            product_description:
+              type: string
+              description: Description of the product on FuelStation
+            id_product_ov:
+              type: integer
+              description: 'This product ID is the internal ID of Overview, read at startup from /startup/products'
+            capacity:
+              type: number
+              description: The Capacity of the Tank
+            volume:
+              type: number
+              description: The current volume of the tank
+            volume_comp:
+              type: number
+              description: The current volume at the temperature of 15.5°C of the tank
+            missing_liquid:
+              type: number
+              description: |
+                What is missing from the tank (Capacity - Volume)
+            product_level:
+              type: number
+              description: The product level in centimeters
+            water_level:
+              type: number
+              description: The water level in centimeters
+            water_volume:
+              type: number
+              description: The water volume in the tank
+            temperature:
+              type: integer
+              description: The actual temperature of the tank
+            automatic:
+              type: boolean
+              x-stoplight:
+                id: qcaswg3uvvmic
+              description: |
+                Used to check if the tank reading is automatic.
+
+                **Not used in last DC clients. Maybe it will be deprecated**
+            last_check:
+              type: string
+              description: Date of last check on the FuelStation
+      title: Tank Input
+    Totalizer:
+      type: object
+      x-examples:
+        Example 1:
+          date_close: '2024-09-17T00:00:00+01:00'
+          start_date: '2024-09-17T00:00:00+01:00'
+          end_date: '2024-09-17T23:59:59+01:00'
+          totalizers_of_pumps:
+            '1':
+              '1':
+                product_description: Verde
+                id_product_ov: 1
+                initial_counter: 179848.98
+                final_counter: 179848.98
+                to_be_added: true
+      title: Totalizers Input
+      properties:
+        day_id:
+          type: integer
+          x-stoplight:
+            id: ook5ex812g9tt
+          description: The ID of the day close linked to these totalizers
+        turn_id:
+          type: integer
+          x-stoplight:
+            id: jhju94hd09t5s
+          description: The ID of the turn close linked to these totalizers
+        date_close:
+          type: string
+          description: |-
+            It represents the date of the close.
+
+            Example: If the close starts at 23:59 of the day X, the date close will surely be X+1
+        start_date:
+          type: string
+          description: Start date of the linked close.
+        end_date:
+          type: string
+          description: |
+            End date of the linked close.
+        totalizers_of_pumps:
+          type: object
+          description: |
+            Totalizers of every single pump/nozzle combination.
+          properties:
+            pump_id:
+              type: object
+              x-stoplight:
+                id: 0fozqlw86cgdr
+              description: Pump and Nozzle IDs are integers used as keys
+              properties:
+                nozzle_id:
+                  type: object
+                  $ref: '#/components/schemas/TotalizerPump'
+        post_ghost:
+          type: boolean
+          x-stoplight:
+            id: kklqiz1xfln7w
+          description: 'If enable, the post ghost (reset of the FuelStation PC) mode is enabled and we create a temporary close on Overview'
+    TotalizerPump:
+      type: object
+      x-examples:
+        Example 1:
+          product_description: Verde
+          id_product_ov: 1
+          initial_counter: 179848.98
+          final_counter: 179848.98
+          to_be_added: true
+      title: Totalizer of Pump
+      description: An object representing the totalizer of a single pump/nozzle combination
+      properties:
+        id_product:
+          type: string
+          x-stoplight:
+            id: vxrnc7fwrjguz
+          description: The product ID on the FuelStation
+        product_description:
+          type: string
+          description: The description of the product on the FuelStation
+        id_product_ov:
+          type: integer
+          description: |
+            This product ID is the internal ID of Overview, read at startup from /startup/products
+        initial_counter:
+          type: number
+          description: |
+            The initial value of the totalizer at the start of the close
+        final_counter:
+          type: number
+          description: |
+            The final value of the totalizer at the end of the close
+        liters:
+          type: number
+          x-stoplight:
+            id: ks2kl0czb724r
+          description: The difference in liters between final counter and initial counter
+        second_pump:
+          type: integer
+          x-stoplight:
+            id: z2uqbhb6xmp8p
+          description: 'If the totalizer is shared between multiple pumps, we add a second pump here'
+        to_be_added:
+          type: boolean
+          description: 'Not used on the server, sent just for debug'
+    Self:
+      type: object
+      x-examples:
+        Example 1:
+          date_time: '2024-09-17T07:46:59.25Z'
+          receipt_number: 575
+          opt_id: 1
+          five_quantity: 132
+          ten_quantity: 317
+          twenty_quantity: 339
+          fifty_quantity: 47
+          total: 12960
+      properties:
+        date_time:
+          type: string
+          description: The date of the empty self / cash in
+        receipt_number:
+          type: integer
+          description: The receipt number
+        operator_code:
+          type: string
+          x-stoplight:
+            id: 5ro1ixny9m7wb
+          description: The name of the operator on the FuelStation
+        opt_id:
+          type: integer
+          description: 'The ID of the OPT (Self) '
+        five_quantity:
+          type: integer
+          description: 'Quantity of 5€ banknotes added to/removed from the safe '
+        ten_quantity:
+          type: integer
+          description: 'Quantity of 10€ banknotes added to/removed from the safe '
+        twenty_quantity:
+          type: integer
+          description: 'Quantity of 20€ banknotes added to/removed from the safe '
+        fifty_quantity:
+          type: integer
+          description: 'Quantity of 50€ banknotes added to/removed from the safe '
+        one_hundred_quantity:
+          type: integer
+          x-stoplight:
+            id: 1z8daqwb4k3vg
+          description: 'Quantity of 100€ banknotes added to/removed from the safe '
+        two_hundred_quantity:
+          type: integer
+          x-stoplight:
+            id: fcll9e251ns1f
+          description: 'Quantity of 200€ banknotes added to/removed from the safe '
+        total:
+          type: integer
+          description: The total of the cash added to/removed from the safe
+        is_cash_in:
+          type: boolean
+          x-stoplight:
+            id: jjpqmynzyhg6n
+          description: |
+            If enabled, the payload is treated as cash in and not as empty self
+        faircom_check:
+          type: boolean
+          x-stoplight:
+            id: 4yeq2cky1mdio
+          description: A boolean used for debug
+        sqlite_check:
+          type: boolean
+          x-stoplight:
+            id: ut42lpsj4vm0p
+          description: A boolean used for debug
+      title: Self Input
+    API-GW-Def-Response:
+      type: object
+      x-stoplight:
+        id: 1c7090723d9ee
+      properties:
+        message:
+          type: string
+      x-examples:
+        Example 1:
+          message: Added
+      title: API-GW-Def-Response
+    API-GW-Def-Response-200:
+      type: object
+      x-stoplight:
+        id: 1c7090723d9ee
+      properties:
+        message:
+          type: string
+      x-examples:
+        Example 1:
+          message: Added
+      title: API-GW-Def-Response-200
+    API-GW-Def-Response-401:
+      type: object
+      properties:
+        message:
+          type: string
+      x-examples:
+        Example 1:
+          message: The incoming token has expired
+      title: API-GW-Def-Response-401
+      description: ''
+    Price:
+      type: object
+      x-examples:
+        Example 1:
+          fuel_station_id: 1160
+          prices:
+            - day_id: 11316
+              price_level: '1'
+              product_id: 4
+              product_name: Gasolio Spec.
+              new_price: 2.149
+              change_price_date: '2024-09-25T09:06:11+02:00'
+          vendor: gilbarco
+          is_code: IB200332
+      properties:
+        fuel_station_id:
+          type: integer
+          description: ID of the FuelStation
+        prices:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/PriceValues'
+        vendor:
+          type: string
+          description: |
+            DC Client's vendor (gilbarco, wayne)
+        is_code:
+          type: string
+          description: |
+            The ISCode of the FuelStation
+      title: Price Input
+    PriceValues:
+      type: object
+      x-examples:
+        Example 1:
+          day_id: 11316
+          price_level: '1'
+          product_id: 4
+          product_name: Gasolio Spec.
+          new_price: 2.149
+          change_price_date: '2024-09-25T09:06:11+02:00'
+      properties:
+        day_id:
+          type: integer
+          description: The Day ID when the price change was made
+        price_level:
+          type: string
+          description: |
+            The level of the changed price. (es. Self/Servito)
+        pump_id:
+          type: integer
+          x-stoplight:
+            id: jdn4sf5fojltt
+          description: The pump ID where the price is changed
+        product_id:
+          type: integer
+          description: The ID of the Product linked to the price
+        product_name:
+          type: string
+          description: The description of the Product linked to the price
+        old_price:
+          type: number
+          x-stoplight:
+            id: b1d7m82j66huk
+          description: The old price that was changed
+        new_price:
+          type: number
+          description: 'The new price '
+        change_price_date:
+          type: string
+          description: The date of the price change
+      title: PriceValues
+    Alarm:
+      type: object
+      x-examples:
+        Example 1:
+          date: '2024-09-12T17:06:10+02:00'
+          option_1: '2024-09-12 17:04:49'
+          option_2: Pompa n.3
+          option_3: N. TRANS. 98790
+          option_4: 'Importo: 30'
+      title: Alarm Input
+      properties:
+        alarm_id:
+          type: integer
+          x-stoplight:
+            id: bx9pkkmhkb2a8
+          description: ID of the Alarm Type
+        date:
+          type: string
+          description: Date of the alarm
+        event_id:
+          type: string
+          x-stoplight:
+            id: v81ryxx7af9he
+          description: The ID of the Event
+        option_1:
+          type: string
+          description: Extra informations about the alarm
+        option_2:
+          type: string
+          description: Extra informations about the alarm
+        option_3:
+          type: string
+          description: Extra informations about the alarm
+        option_4:
+          type: string
+          description: Extra informations about the alarm
+        device:
+          type: string
+          x-stoplight:
+            id: lo5973gm20es4
+          description: The device that generated the alarm
+    Cards:
+      type: object
+      x-examples:
+        Example 1:
+          '636200': UTA
+          '636201': UTA
+      additionalProperties:
+        x-stoplight:
+          id: 7suoz3iw7ntby
+        type: string
+      title: Cards Output
+    Product:
+      title: Product Output
+      x-stoplight:
+        id: aoo64htbextll
+      type: object
+      properties:
+        id_overview:
+          type: integer
+          x-stoplight:
+            id: ky1xi8q7m6nr7
+        description:
+          type: string
+          x-stoplight:
+            id: 1ym26nmk2bxry
+        description_PC:
+          type: string
+          x-stoplight:
+            id: kwx7orkomt5z0
+    SupplyInformations:
+      title: SupplyInformations
+      x-stoplight:
+        id: 4bgq44kebewp5
+      type: object
+      properties:
+        date:
+          type: string
+          x-stoplight:
+            id: tesyd5kvmetcd
+        payment_map:
+          type: object
+          x-stoplight:
+            id: m33637e2s8lt2
+          additionalProperties:
+            x-stoplight:
+              id: 7zs5k70ueq27n
+            type: number
+      description: Informations about supplies that needs to be paid or to be rechecked for some reason
+    Startup-Informations:
+      title: Startup-Informations
+      x-stoplight:
+        id: g0mk9o328omfx
+      type: object
+      properties:
+        supplies_to_pay:
+          type: object
+          x-stoplight:
+            id: a6qs9kpjg0nn1
+          additionalProperties:
+            $ref: '#/components/schemas/SupplyInformations'
+        remains_to_pay:
+          type: object
+          x-stoplight:
+            id: nh91ck31nmu8d
+          description: Informations about remains that need to be paid
+          properties:
+            id:
+              type: integer
+              x-stoplight:
+                id: itlx4oy6vtvyy
+            remain_code:
+              type: integer
+              x-stoplight:
+                id: 3ss5tzoz6d81i
+        supplies_to_recheck:
+          type: object
+          x-stoplight:
+            id: 7o6jz4at74tbt
+          additionalProperties:
+            $ref: '#/components/schemas/SupplyInformations'
+        operative_modes_settings:
+          type: object
+          x-stoplight:
+            id: nlzrrocjtan2p
+          description: Informations about the operative modes on the FuelStation
+          properties:
+            level:
+              type: integer
+              x-stoplight:
+                id: du96v758m7a4a
+              description: Level of the operative mode
+            description:
+              type: string
+              x-stoplight:
+                id: n1jny93g1uuw6
+              description: Description of the operative mode
+        price_level_settings:
+          type: object
+          x-stoplight:
+            id: p1rjwuwp5rhq8
+          description: Informations about price level settings
+          properties:
+            level:
+              type: integer
+              x-stoplight:
+                id: wyhih8idmhysl
+            description:
+              type: string
+              x-stoplight:
+                id: 7m7tgnul72kkj
+            mise_description:
+              type: string
+              x-stoplight:
+                id: wjhvmg3j1rsxa
+              description: Description about the price level for the italian government
+        max_supplies_hours:
+          type: integer
+          x-stoplight:
+            id: i06v4tbq6wgcj
+          description: Max hours to wait before considering a supply fully paid.
+        mechanical_totalizer:
+          type: boolean
+          x-stoplight:
+            id: tjl6zd0j4so4g
+          description: 'If enabled, we read the value of the mechanical totalizers on the FuelStation'
+        read_all_no_tanks:
+          type: boolean
+          x-stoplight:
+            id: 91kb3c6k5s7va
+          description: 'If enabled, we collect data for every entity except for tanks'
+        read_tanks:
+          type: boolean
+          x-stoplight:
+            id: 5m8yllygesq16
+          description: If enabled we read data for tanks
+        read_supplies:
+          type: boolean
+          x-stoplight:
+            id: ipq81ao13l2tx
+          description: If enabled we read data for supplies
+        send_price:
+          type: boolean
+          x-stoplight:
+            id: 9n1osbkqm0btm
+          description: If enabled we give the possibility to change the price remotely
+        read_price:
+          type: boolean
+          x-stoplight:
+            id: cvoik5w3va5ef
+          description: If enabled we read data for prices
+        read_alarms:
+          type: boolean
+          x-stoplight:
+            id: ovji4hlngwsya
+          description: If enabled we read data for alarms
+        last_close_day:
+          type: string
+          x-stoplight:
+            id: 5cksp1a2sjxnd
+          description: Date indicating the last day close saved on Overview Database
+        last_close_midnight:
+          type: string
+          x-stoplight:
+            id: wyi3a3tbo1zwt
+          description: Date indicating the last midnight close saved on Overview Database
+        last_close_turn:
+          type: string
+          x-stoplight:
+            id: zf2t3uaagd6dq
+          description: Date indicating the last turn close saved on Overview Database
+        last_supply:
+          type: string
+          x-stoplight:
+            id: mqcx7maicl7mj
+          description: Date indicating the last supply saved on Overview Database
+        last_remains:
+          type: string
+          x-stoplight:
+            id: 89dsmxk2j67gm
+          description: Date indicating the last remain saved on Overview Database
+        last_price_change:
+          type: string
+          x-stoplight:
+            id: jmnvprtsfsc6u
+          description: Date indicating the last price change saved on Overview Database
+        last_price_change_for_mise:
+          type: string
+          x-stoplight:
+            id: 2n7ek0gj1b2kl
+          description: Date indicating the last price change for MISE saved on Overview Database
+        last_empty_self:
+          type: string
+          x-stoplight:
+            id: w6whotbtiettm
+          description: Date indicating the last empty self saved on Overview Database
+        last_cash_in:
+          type: string
+          x-stoplight:
+            id: 8j5yfn04tji6e
+          description: Date indicating the last cash in saved on Overview Database
+        last_tank:
+          type: string
+          x-stoplight:
+            id: kgr880rk7dy5j
+          description: Date indicating the last tank saved on Overview Database
+        last_alarm:
+          type: string
+          x-stoplight:
+            id: 8kyxrus7f0cqw
+          description: Date indicating the last alarm saved on Overview Database
+    WhatToDo:
+      title: WhatToDo
+      x-stoplight:
+        id: shulny44cslxt
+      type: object
+      properties:
+        reconfiguration:
+          type: boolean
+          x-stoplight:
+            id: 9oeqhbpzw0zk2
+        force_collection:
+          type: boolean
+          x-stoplight:
+            id: 9j7vnwrqrsr1d
+        read_supplies:
+          type: boolean
+          x-stoplight:
+            id: ld6j7sdxwudom
+        read_paid_supplies:
+          type: boolean
+          x-stoplight:
+            id: fc95c2wht86mv
+        stop_collection:
+          type: boolean
+          x-stoplight:
+            id: s6cb4grpmy4p0
+        send_configuration:
+          type: boolean
+          x-stoplight:
+            id: t65wp0d0fac9v
+        debug:
+          type: object
+          x-stoplight:
+            id: i9su36ivc89ye
+          properties:
+            db:
+              type: boolean
+              x-stoplight:
+                id: hz6fhqs72kgu5
+            log:
+              type: boolean
+              x-stoplight:
+                id: r5mpjg5zp9crm
+            until_date:
+              type: string
+              x-stoplight:
+                id: upnvfgdbhe7gu
+        move_to_beta:
+          type: string
+          x-stoplight:
+            id: 85nqalydqhumr
+        check_update:
+          type: string
+          x-stoplight:
+            id: fj3zn96tsp0ko
+        ca_update:
+          type: boolean
+          x-stoplight:
+            id: hy731vc6la1wi
+        pre_ghost:
+          type: boolean
+          x-stoplight:
+            id: omxglwj6e3233
+        recalc:
+          type: object
+          x-stoplight:
+            id: xo9an8hykhlph
+          properties:
+            time:
+              type: object
+              x-stoplight:
+                id: qbjt82dka16z5
+              properties:
+                begin:
+                  type: string
+                  x-stoplight:
+                    id: zhxb32vp4hi3m
+                end:
+                  type: string
+                  x-stoplight:
+                    id: jjfa84n3ql48w
+            entities:
+              type: object
+              x-stoplight:
+                id: 979vm2ikbec1q
+              properties:
+                supplies:
+                  type: boolean
+                  x-stoplight:
+                    id: 3j2zwy1ygb56k
+                tanks:
+                  type: boolean
+                  x-stoplight:
+                    id: cgcbjjxi3rr78
+                alarms:
+                  type: boolean
+                  x-stoplight:
+                    id: 54lxrohrr9b7w
+                day_closes:
+                  type: boolean
+                  x-stoplight:
+                    id: mu9kiw16f6os9
+                turn_closes:
+                  type: boolean
+                  x-stoplight:
+                    id: wy84iojpcyr71
+                midnight_closes:
+                  type: boolean
+                  x-stoplight:
+                    id: yv7m98372s571
+                price_history:
+                  type: boolean
+                  x-stoplight:
+                    id: cu1ppd9tbsp8t
+                remains:
+                  type: boolean
+                  x-stoplight:
+                    id: zix5b6rcv5cdn
+                empty_self:
+                  type: boolean
+                  x-stoplight:
+                    id: rutw50ne9uxvs
+                cash_in:
+                  type: boolean
+                  x-stoplight:
+                    id: 20ogrvnjxn4y3
+    Pumps:
+      title: Pumps
+      x-stoplight:
+        id: 6j7z8bpxbxuvp
+      type: object
+      properties:
+        id_ov_pump:
+          type: integer
+          x-stoplight:
+            id: w46fsfxx3ygyx
+          description: ID of the pump on Overview
+        product_id_ov:
+          type: integer
+          x-stoplight:
+            id: 9p3igheiu3esy
+          description: ID of the product on Overview
+        product_description:
+          type: string
+          x-stoplight:
+            id: 8s8ribc2mt83t
+          description: |
+            Description of the product
+    Def-ModCheckPrices-Response:
+      title: Def-ModCheckPrices-Response
+      x-stoplight:
+        id: mxgx0k4g84zyb
+      type: object
+      properties:
+        status:
+          type: string
+          x-stoplight:
+            id: ybff2tljn9kpj
+        error:
+          type: string
+          x-stoplight:
+            id: 5ubqudq5elu7c
+x-internal: false
