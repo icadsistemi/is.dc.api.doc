@@ -1404,7 +1404,7 @@ paths:
             schema:
               type: object
               properties: {}
-        description: It accepts every json
+        description: The configuration changes between every DC Client so we don't check the JSON but we save everything we receive.
   /tanks:
     post:
       responses:
