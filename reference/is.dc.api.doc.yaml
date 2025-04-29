@@ -4,51 +4,53 @@ x-stoplight:
 info:
   title: mxp-datacollection-v2
   description: New DataCollection V2 Rest API - Public API
-  version: '1.0'
+  version: "1.0"
 servers:
-  - url: 'https://mxp-datacollection-api.prod.icadsistemi.com/api/v2'
+  - url: "https://mxp-datacollection-api.prod.icadsistemi.com/api/v2"
     description: production
-  - url: 'https://mxp-datacollection-api.dev.icadsistemi.com/api/v2'
+  - url: "https://mxp-datacollection-api.dev.icadsistemi.com/api/v2"
     description: development
 paths:
   /totalizers:
     post:
+      tags:
+        - Totalizers
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '401':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '422':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
           description: Unprocessable Entity (WebDAV)
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '500':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '504':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "504":
           description: Gateway Timeout
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
+                $ref: "#/components/schemas/API-GW-Def-Response"
       security:
         - Cognito: []
       x-stoplight:
@@ -61,7 +63,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/Totalizer'
+                $ref: "#/components/schemas/Totalizer"
       parameters:
         - schema:
             type: string
@@ -79,11 +81,11 @@ paths:
           in: header
           name: x-dc-version
           description: Client version
-      description: 'API used to add totalizers data. It uses the Turn ID to decide whatever it''s a day totalizer or a turn totalizer. If the totalizer doesn''t exists on Overview Database, it will be created.'
+      description: "API used to add totalizers data. It uses the Turn ID to decide whatever it's a day totalizer or a turn totalizer. If the totalizer doesn't exists on Overview Database, it will be created."
   /manage/prices:
     get:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
@@ -118,7 +120,7 @@ paths:
                           type: integer
                           x-stoplight:
                             id: aje45ot5gdi3r
-                          description: 'The level (es. Self) where we activate that price, in number format [1,8]'
+                          description: "The level (es. Self) where we activate that price, in number format [1,8]"
                         trace_id:
                           type: string
                           x-stoplight:
@@ -129,27 +131,27 @@ paths:
                           x-stoplight:
                             id: pvvksy4b6wmfc
                           description: The date when the prices needs to be activated
-        '204':
+        "204":
           description: No Content
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/Def-ModCheckPrices-Response'
-        '401':
+                $ref: "#/components/schemas/Def-ModCheckPrices-Response"
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/Def-ModCheckPrices-Response'
-        '500':
+                $ref: "#/components/schemas/Def-ModCheckPrices-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/Def-ModCheckPrices-Response'
+                $ref: "#/components/schemas/Def-ModCheckPrices-Response"
       security:
         - Cognito: []
       x-stoplight:
@@ -161,41 +163,41 @@ paths:
       description: API to retrieve the prices to activate on the FuelStation. The ISCode of FuelStation is read from the token
     put:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/Def-ModCheckPrices-Response'
-        '401':
+                $ref: "#/components/schemas/Def-ModCheckPrices-Response"
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/Def-ModCheckPrices-Response'
-        '403':
+                $ref: "#/components/schemas/Def-ModCheckPrices-Response"
+        "403":
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/Def-ModCheckPrices-Response'
-        '404':
+                $ref: "#/components/schemas/Def-ModCheckPrices-Response"
+        "404":
           description: Not Found
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/Def-ModCheckPrices-Response'
-        '500':
+                $ref: "#/components/schemas/Def-ModCheckPrices-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/Def-ModCheckPrices-Response'
+                $ref: "#/components/schemas/Def-ModCheckPrices-Response"
       security:
         - Cognito: []
       x-stoplight:
@@ -240,17 +242,17 @@ paths:
   /startup/products:
     post:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
               schema:
                 type: object
                 additionalProperties:
-                  $ref: '#/components/schemas/Product'
-        '404':
+                  $ref: "#/components/schemas/Product"
+        "404":
           description: Not Found. Deprecated in newer versions
-        '422':
+        "422":
           description: Unprocessable Entity (WebDAV)
       security:
         - Cognito: []
@@ -268,7 +270,7 @@ paths:
                 x-stoplight:
                   id: omklwj5phk7gb
                 type: string
-  '/remains/{remain_code}':
+  "/remains/{remain_code}":
     get:
       parameters:
         - name: remain_code
@@ -293,42 +295,42 @@ paths:
           name: x-dc-version
           description: Client version
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
               schema:
                 type: object
                 additionalProperties:
-                  $ref: '#/components/schemas/Remain'
-        '401':
+                  $ref: "#/components/schemas/Remain"
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '404':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "404":
           description: Not Found
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '422':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
           description: Unprocessable Entity (WebDAV)
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '500':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
+                $ref: "#/components/schemas/API-GW-Def-Response"
       security:
         - Cognito: []
       x-stoplight:
@@ -339,7 +341,7 @@ paths:
   /startup/logs:
     get:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
@@ -351,7 +353,7 @@ paths:
                 x-examples:
                   Example 1:
                     key: aaaaabbbbb123452148vnivososooooo
-        '401':
+        "401":
           description: 401 response
           content: {}
       security:
@@ -364,7 +366,7 @@ paths:
   /startup/pumps:
     get:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
@@ -380,35 +382,35 @@ paths:
                         id: 21frj1ivongd4
                       type: object
                       additionalProperties:
-                        $ref: '#/components/schemas/Pumps'
-        '401':
+                        $ref: "#/components/schemas/Pumps"
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '404':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "404":
           description: Not Found
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '422':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
           description: Unprocessable Entity (WebDAV)
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '500':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
+                $ref: "#/components/schemas/API-GW-Def-Response"
       security:
         - Cognito: []
       x-stoplight:
@@ -435,8 +437,8 @@ paths:
       description: API used to retrieve all pumps linked to a FuelStation. The ISCode is taken from the token or from the header.
     post:
       responses:
-        '200':
-          description: '200 response. The body is a dictionary of pumps_id/nozzle_id/PumpObject. '
+        "200":
+          description: "200 response. The body is a dictionary of pumps_id/nozzle_id/PumpObject. "
           content:
             application/json:
               schema:
@@ -446,35 +448,35 @@ paths:
                     id: ovotsz9it0gj3
                   type: object
                   additionalProperties:
-                    $ref: '#/components/schemas/Pumps'
-        '401':
+                    $ref: "#/components/schemas/Pumps"
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '422':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
           description: Unprocessable Entity (WebDAV)
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '500':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
+                $ref: "#/components/schemas/API-GW-Def-Response"
       security:
         - Cognito: []
       x-stoplight:
         id: cphemes8h608m
       summary: Send Pumps
       operationId: post-pumps
-      description: 'API to send pumps to Overview Database, in order to create them and receive the ID of the pump useful for supply and other analysis.'
+      description: "API to send pumps to Overview Database, in order to create them and receive the ID of the pump useful for supply and other analysis."
       requestBody:
         content:
           application/json:
@@ -485,9 +487,9 @@ paths:
                   id: a2pp5gwvn3l4h
                 type: object
                 additionalProperties:
-                  $ref: '#/components/schemas/Pumps'
-        description: 'The body is a dictionary of pumps_id/nozzle_id/PumpObject. '
-  '/startup/pumps/{pump_id}/nozzle/{nozzle_id}/product/{product_id}':
+                  $ref: "#/components/schemas/Pumps"
+        description: "The body is a dictionary of pumps_id/nozzle_id/PumpObject. "
+  "/startup/pumps/{pump_id}/nozzle/{nozzle_id}/product/{product_id}":
     get:
       parameters:
         - name: pump_id
@@ -506,7 +508,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
@@ -517,48 +519,48 @@ paths:
                     type: integer
                     x-stoplight:
                       id: yljyeob7y015i
-        '401':
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '404':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "404":
           description: Not Found
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '422':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
           description: Unprocessable Entity (WebDAV)
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '500':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
+                $ref: "#/components/schemas/API-GW-Def-Response"
       security:
         - Cognito: []
       x-stoplight:
         id: oi3yuhe1qej9f
       operationId: get-pump-id
       summary: Get Pump ID
-      description: 'API used to retrieve the Overview ID of a pump linked to a FuelStation given its number, the nozzle ID and the product ID. The ISCode is taken from the token or from the header.'
+      description: "API used to retrieve the Overview ID of a pump linked to a FuelStation given its number, the nozzle ID and the product ID. The ISCode is taken from the token or from the header."
   /startup/internationalcards:
     get:
       responses:
-        '200':
+        "200":
           description: 200 response
           content: {}
-        '401':
+        "401":
           description: 401 response
           content: {}
       security:
@@ -574,45 +576,45 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: '#/components/schemas/Cards'
+              $ref: "#/components/schemas/Cards"
   /supplies:
     post:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response-200'
-        '401':
+                $ref: "#/components/schemas/API-GW-Def-Response-200"
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response-401'
-        '422':
+                $ref: "#/components/schemas/API-GW-Def-Response-401"
+        "422":
           description: Unprocessable Entity (WebDAV)
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '500':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '504':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "504":
           description: Gateway Timeout
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
+                $ref: "#/components/schemas/API-GW-Def-Response"
       x-stoplight:
         id: eq0iwn291u3iw
       requestBody:
@@ -621,7 +623,7 @@ paths:
             schema:
               type: object
               additionalProperties:
-                $ref: '#/components/schemas/Supply'
+                $ref: "#/components/schemas/Supply"
         description: The body is a key/value dictionary where the key is the ID of the supply.
       parameters:
         - schema:
@@ -641,55 +643,55 @@ paths:
           name: x-dc-version
           description: Client version
       summary: Send Supply
-      operationId: ''
+      operationId: ""
       description: Send supplies to save on Overview Database
       security:
         - Cognito: []
   /self/empty:
     post:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '401':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '422':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
           description: Unprocessable Entity (WebDAV)
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '500':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '504':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "504":
           description: Gateway Timeout
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
+                $ref: "#/components/schemas/API-GW-Def-Response"
       security:
         - Cognito: []
       x-stoplight:
         id: yo7zf1yonip2y
       summary: Add Self informations
       operationId: post-self
-      description: 'API used to add information about self''s operation like cash in (money added) or empty self (money removed). '
+      description: "API used to add information about self's operation like cash in (money added) or empty self (money removed). "
       parameters:
         - schema:
             type: string
@@ -713,38 +715,38 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/Self'
+                $ref: "#/components/schemas/Self"
   /alarms:
     post:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '401':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '422':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
           description: Unprocessable Entity (WebDAV)
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '500':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
+                $ref: "#/components/schemas/API-GW-Def-Response"
       security:
         - Cognito: []
       x-stoplight:
@@ -775,45 +777,45 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/Alarm'
+                $ref: "#/components/schemas/Alarm"
   /remains:
     post:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '401':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '422':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
           description: Unprocessable Entity (WebDAV)
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '500':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '504':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "504":
           description: Gateway Timeout
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
+                $ref: "#/components/schemas/API-GW-Def-Response"
       security:
         - Cognito: []
       x-stoplight:
@@ -844,32 +846,32 @@ paths:
             schema:
               type: object
               additionalProperties:
-                $ref: '#/components/schemas/Remain'
+                $ref: "#/components/schemas/Remain"
         description: The body is a key/value dictionary where the key is the ID of the remain
   /startup/informations:
     get:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/Startup-Informations'
-        '401':
+                $ref: "#/components/schemas/Startup-Informations"
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '404':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "404":
           description: Not Found
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
+                $ref: "#/components/schemas/API-GW-Def-Response"
       security:
         - Cognito: []
       x-stoplight:
@@ -897,17 +899,17 @@ paths:
   /manage/whattodo:
     get:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/WhatToDo'
-        '401':
+                $ref: "#/components/schemas/WhatToDo"
+        "401":
           description: 401 response
           content: {}
-        '403':
+        "403":
           description: 403 response
           content: {}
       security:
@@ -920,41 +922,41 @@ paths:
   /closes/day:
     post:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '401':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '422':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
           description: Unprocessable Entity (WebDAV)
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '500':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '504':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "504":
           description: Gateway Timeout
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
+                $ref: "#/components/schemas/API-GW-Def-Response"
       x-stoplight:
         id: 6q8pbofh07pak
       requestBody:
@@ -963,7 +965,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/Closes'
+                $ref: "#/components/schemas/Closes"
         description: The body is an array of closes to add
       description: API to add a day closes to the Overview Database.
       operationId: post-day-closes
@@ -990,61 +992,61 @@ paths:
   /prices:
     post:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '401':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '422':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
           description: Unprocessable Entity (WebDAV)
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '500':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '504':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "504":
           description: Gateway Timeout
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
+                $ref: "#/components/schemas/API-GW-Def-Response"
       security:
         - Cognito: []
       x-stoplight:
         id: xnzn6ldh606w2
       operationId: post-price
       summary: Add Price informations
-      description: 'API used to send informations about price change, also used to send those informations to Italian Government.'
+      description: "API used to send informations about price change, also used to send those informations to Italian Government."
       requestBody:
         content:
           application/json:
             schema:
               type: object
-              $ref: '#/components/schemas/Price'
+              $ref: "#/components/schemas/Price"
   /startup/cards:
     get:
       responses:
-        '200':
+        "200":
           description: 200 response
           content: {}
-        '401':
+        "401":
           description: 401 response
           content: {}
       security:
@@ -1059,11 +1061,11 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: '#/components/schemas/Cards'
+              $ref: "#/components/schemas/Cards"
   /fuelstations:
     get:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
@@ -1082,20 +1084,20 @@ paths:
                       type: string
                       x-stoplight:
                         id: 8mkk1d1y5t4x4
-        '422':
+        "422":
           description: Unprocessable Entity (WebDAV)
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '500':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
+                $ref: "#/components/schemas/API-GW-Def-Response"
       security:
         - Cognito: []
       x-stoplight:
@@ -1113,41 +1115,41 @@ paths:
   /totalizers/midnight:
     post:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '401':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '422':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
           description: Unprocessable Entity (WebDAV)
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '500':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '504':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "504":
           description: Gateway Timeout
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
+                $ref: "#/components/schemas/API-GW-Def-Response"
       security:
         - Cognito: []
       x-stoplight:
@@ -1160,7 +1162,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/Totalizer'
+                $ref: "#/components/schemas/Totalizer"
       parameters:
         - schema:
             type: string
@@ -1178,45 +1180,45 @@ paths:
           in: header
           name: x-dc-version
           description: Client version
-      description: 'API used to add midnight closes'' totalizers data. If the totalizer doesn''t exists on Overview Database, it will be created.'
+      description: "API used to add midnight closes' totalizers data. If the totalizer doesn't exists on Overview Database, it will be created."
   /closes/day/midnight:
     post:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '401':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '422':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
           description: Unprocessable Entity (WebDAV)
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '500':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '504':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "504":
           description: Gateway Timeout
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
+                $ref: "#/components/schemas/API-GW-Def-Response"
       security:
         - Cognito: []
       x-stoplight:
@@ -1227,7 +1229,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/Closes'
+                $ref: "#/components/schemas/Closes"
         description: The body is an array of closes to add
       description: API to add a midnight closes to the Overview Database.
       operationId: post-midnight-closes
@@ -1252,7 +1254,7 @@ paths:
   /health:
     head:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
@@ -1275,82 +1277,82 @@ paths:
   /supplies/paid:
     get:
       responses:
-        '200':
+        "200":
           description: 200 response. The body is a key/value dictionary where the key is the ID of the supply.
           content:
             application/json:
               schema:
                 type: object
                 additionalProperties:
-                  $ref: '#/components/schemas/Supply'
-        '401':
+                  $ref: "#/components/schemas/Supply"
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '422':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
           description: Unprocessable Entity (WebDAV)
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '500':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
+                $ref: "#/components/schemas/API-GW-Def-Response"
       x-stoplight:
         id: t2w5lpn1drte4
       summary: Get Paid Supplies
       description: |-
         API used to retrieve supplies paid with our POS. It reads the ISCODE used as input from the cognito token.
 
-        The output, if everything is okay, is the same map of supplies sent in the /supplies POST. 
+        The output, if everything is okay, is the same map of supplies sent in the /supplies POST.
       security:
         - Cognito: []
   /prices/history:
     post:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '401':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '422':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
           description: Unprocessable Entity (WebDAV)
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '500':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '504':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "504":
           description: Gateway Timeout
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
+                $ref: "#/components/schemas/API-GW-Def-Response"
       security:
         - Cognito: []
       x-stoplight:
@@ -1364,7 +1366,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/PriceValues'
+                $ref: "#/components/schemas/PriceValues"
       parameters:
         - schema:
             type: string
@@ -1385,10 +1387,10 @@ paths:
   /manage/configuration:
     post:
       responses:
-        '200':
+        "200":
           description: 200 response
           content: {}
-        '401':
+        "401":
           description: 401 response
           content: {}
       security:
@@ -1408,54 +1410,54 @@ paths:
   /tanks:
     post:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '401':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '422':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
           description: Unprocessable Entity (WebDAV)
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '500':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '504':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "504":
           description: Gateway Timeout
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
+                $ref: "#/components/schemas/API-GW-Def-Response"
       security:
         - Cognito: []
       x-stoplight:
         id: 2b0x7rc6eh475
       operationId: post-tanks
       summary: Add Tanks informations
-      description: 'API used to send tanks'' informations. If the tank doesn''t exists on Overview Database, it will be created.'
+      description: "API used to send tanks' informations. If the tank doesn't exists on Overview Database, it will be created."
       requestBody:
         content:
           application/json:
             schema:
               type: object
-              $ref: '#/components/schemas/Tank'
+              $ref: "#/components/schemas/Tank"
       parameters:
         - schema:
             type: string
@@ -1476,41 +1478,41 @@ paths:
   /closes/turn:
     post:
       responses:
-        '200':
+        "200":
           description: 200 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '401':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "401":
           description: 401 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '422':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
           description: Unprocessable Entity (WebDAV)
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '500':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
           description: 500 response
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
-        '504':
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "504":
           description: Gateway Timeout
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/API-GW-Def-Response'
+                $ref: "#/components/schemas/API-GW-Def-Response"
       security:
         - Cognito: []
       x-stoplight:
@@ -1521,7 +1523,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/Closes'
+                $ref: "#/components/schemas/Closes"
         description: The body is an array of closes to add
       operationId: post-turn-closes
       summary: Create a turn close
@@ -1549,17 +1551,17 @@ components:
       type: oauth2
       flows:
         password:
-          tokenUrl: ''
-          refreshUrl: ''
+          tokenUrl: ""
+          refreshUrl: ""
           scopes: {}
   schemas:
     Supply:
       type: object
       x-examples:
         Example 1:
-          '424242':
+          "424242":
             transaction_id: 404092
-            date: '2024-09-07T14:16:00+01:00'
+            date: "2024-09-07T14:16:00+01:00"
             pump_id: 4
             nozzle_id: 2
             pump_ovid: 12345
@@ -1572,16 +1574,16 @@ components:
               - payment_mode: CONTANTE
                 card_name: BANCONOTE
                 amount: 26.45
-                data: '2024-09-07T14:16:00+01:00'
+                data: "2024-09-07T14:16:00+01:00"
             operative_mode: FAIDATE
             price_level: SELF
             device_type: PUMAPRO
             electronic_totalizer: 1117356
             actual_totalizer: 1117356
             ticket_id: 235849
-            paid_supply_payment_date: '0001-01-01T00:00:00Z'
+            paid_supply_payment_date: "0001-01-01T00:00:00Z"
             stp_debug: true
-            connection_date: '2024-09-08T03:08:44.15625+01:00'
+            connection_date: "2024-09-08T03:08:44.15625+01:00"
       title: Supply Input
       required:
         - transaction_id
@@ -1604,7 +1606,7 @@ components:
       properties:
         transaction_id:
           type: integer
-          description: 'The transaction refers to the payment ID, in some cases it can be the same as supplyID'
+          description: "The transaction refers to the payment ID, in some cases it can be the same as supplyID"
         date:
           type: string
           description: Date of supply
@@ -1614,7 +1616,7 @@ components:
             This is the pump id on the fuelstation, it's a small integer, usually between 1-15
         nozzle_id:
           type: integer
-          description: 'This is the nozzle id on the fuelstation, every pump has a set of linked nozzle. It''s a small integer, usually between 0-5'
+          description: "This is the nozzle id on the fuelstation, every pump has a set of linked nozzle. It's a small integer, usually between 0-5"
         product_id:
           type: integer
           description: |
@@ -1684,7 +1686,7 @@ components:
                 type: integer
                 x-stoplight:
                   id: 5i4bvvcl83w4a
-                description: 'Usually the same TransactionID used in the supply. Sometimes it could be different between multiple payments, so we include in it'
+                description: "Usually the same TransactionID used in the supply. Sometimes it could be different between multiple payments, so we include in it"
               counted:
                 type: boolean
                 x-stoplight:
@@ -1698,13 +1700,13 @@ components:
                 description: Boolean used to understand if the payment was indoor or outdoor.
         unit_price:
           type: number
-          description: 'Unit Price for the product, usually for 1 liter or kilo.'
+          description: "Unit Price for the product, usually for 1 liter or kilo."
         operative_mode:
           type: string
           description: This refers to the operative mode on the fuelstation during the supply (es. Self)
         price_level:
           type: string
-          description: 'We can have different price level on the fuelstation, based also on operative mode.'
+          description: "We can have different price level on the fuelstation, based also on operative mode."
         device_type:
           type: string
           description: The device used to start the supply
@@ -1726,12 +1728,12 @@ components:
           type: number
           x-stoplight:
             id: sfd06vfw6y98s
-          description: 'The PreAmount is the amount that the supply should reach. '
+          description: "The PreAmount is the amount that the supply should reach. "
         remain:
           type: number
           x-stoplight:
             id: 23f22mfby8crx
-          description: 'If the supply has a remain, we put it''s amount in this field'
+          description: "If the supply has a remain, we put it's amount in this field"
         checked:
           type: boolean
           x-stoplight:
@@ -1744,7 +1746,7 @@ components:
           description: Internal Boolean to understand if the supply was paid with our PAX POS
         paid_supply_payment_date:
           type: string
-          description: 'Date of the payment made from our PAX POS '
+          description: "Date of the payment made from our PAX POS "
         paid_with_card:
           type: boolean
           x-stoplight:
@@ -1776,9 +1778,9 @@ components:
       type: object
       x-examples:
         Example 1:
-          '240402':
+          "240402":
             real_ticket_id: 37603
-            date: '2024-06-27T13:59:57+02:00'
+            date: "2024-06-27T13:59:57+02:00"
             opt_id: 1
             pre_amount: 20
             amount: 11.95
@@ -1787,8 +1789,8 @@ components:
             product_desc: Verde
             remain_supply_id: 90274
             refund_mode: DA RIMBORSARE
-            refund_date: '1970-01-01T01:00:00+01:00'
-            expiration_date: '2024-09-25T13:59:57+02:00'
+            refund_date: "1970-01-01T01:00:00+01:00"
+            expiration_date: "2024-09-25T13:59:57+02:00"
       properties:
         real_ticket_id:
           type: integer
@@ -1830,7 +1832,7 @@ components:
       type: object
       x-examples:
         Example 1:
-          start_date: ''
+          start_date: ""
       required:
         - start_date
         - end_date
@@ -1873,7 +1875,7 @@ components:
       type: object
       x-examples:
         Example 1:
-          '1':
+          "1":
             id_product: SP
             product_description: Verde
             id_product_ov: 1
@@ -1883,8 +1885,8 @@ components:
             missing_liquid: 16379.875
             product_level: 751.6300048828125
             temperature: 22.200000762939453
-            last_check: '2024-09-19T03:51:07.4375+02:00'
-          '2':
+            last_check: "2024-09-19T03:51:07.4375+02:00"
+          "2":
             id_product: KD
             product_description: Not Avaiable
             id_product_ov: 4
@@ -1896,8 +1898,8 @@ components:
             water_level: 0.5100002288818359
             water_volume: 1.3770005702972412
             temperature: 24
-            last_check: '2024-09-19T03:51:07.4375+02:00'
-          '3':
+            last_check: "2024-09-19T03:51:07.4375+02:00"
+          "3":
             id_product: GG
             product_description: Diesel
             id_product_ov: 2
@@ -1907,8 +1909,8 @@ components:
             missing_liquid: 9937.6298828125
             product_level: 1301.8199462890625
             temperature: 22.299999237060547
-            last_check: '2024-09-19T03:51:07.4375+02:00'
-          '4':
+            last_check: "2024-09-19T03:51:07.4375+02:00"
+          "4":
             id_product: GP
             product_description: GPL
             id_product_ov: 6
@@ -1918,20 +1920,20 @@ components:
             missing_liquid: 15479.328125
             product_level: 908.7999877929688
             temperature: 21.100000381469727
-            last_check: '2024-09-19T03:51:07.4375+02:00'
-          '5':
+            last_check: "2024-09-19T03:51:07.4375+02:00"
+          "5":
             id_product: AD
             product_description: AdBlue
             id_product_ov: 5
             capacity: 4000
             volume: -60303.35
-            last_check: '2024-09-19T03:51:07.453125+02:00'
+            last_check: "2024-09-19T03:51:07.453125+02:00"
       properties:
         tank_id:
           type: object
           x-stoplight:
             id: ygdf0bnr8hsj9
-          description: 'A number, used as key in a map of integers. It represents the ID of the tank (es. 1)'
+          description: "A number, used as key in a map of integers. It represents the ID of the tank (es. 1)"
           properties:
             id_product:
               type: string
@@ -1941,7 +1943,7 @@ components:
               description: Description of the product on FuelStation
             id_product_ov:
               type: integer
-              description: 'This product ID is the internal ID of Overview, read at startup from /startup/products'
+              description: "This product ID is the internal ID of Overview, read at startup from /startup/products"
             capacity:
               type: number
               description: The Capacity of the Tank
@@ -1983,12 +1985,12 @@ components:
       type: object
       x-examples:
         Example 1:
-          date_close: '2024-09-17T00:00:00+01:00'
-          start_date: '2024-09-17T00:00:00+01:00'
-          end_date: '2024-09-17T23:59:59+01:00'
+          date_close: "2024-09-17T00:00:00+01:00"
+          start_date: "2024-09-17T00:00:00+01:00"
+          end_date: "2024-09-17T23:59:59+01:00"
           totalizers_of_pumps:
-            '1':
-              '1':
+            "1":
+              "1":
                 product_description: Verde
                 id_product_ov: 1
                 initial_counter: 179848.98
@@ -2032,12 +2034,12 @@ components:
               properties:
                 nozzle_id:
                   type: object
-                  $ref: '#/components/schemas/TotalizerPump'
+                  $ref: "#/components/schemas/TotalizerPump"
         post_ghost:
           type: boolean
           x-stoplight:
             id: kklqiz1xfln7w
-          description: 'If enable, the post ghost (reset of the FuelStation PC) mode is enabled and we create a temporary close on Overview'
+          description: "If enable, the post ghost (reset of the FuelStation PC) mode is enabled and we create a temporary close on Overview"
     TotalizerPump:
       type: object
       x-examples:
@@ -2079,15 +2081,15 @@ components:
           type: integer
           x-stoplight:
             id: z2uqbhb6xmp8p
-          description: 'If the totalizer is shared between multiple pumps, we add a second pump here'
+          description: "If the totalizer is shared between multiple pumps, we add a second pump here"
         to_be_added:
           type: boolean
-          description: 'Not used on the server, sent just for debug'
+          description: "Not used on the server, sent just for debug"
     Self:
       type: object
       x-examples:
         Example 1:
-          date_time: '2024-09-17T07:46:59.25Z'
+          date_time: "2024-09-17T07:46:59.25Z"
           receipt_number: 575
           opt_id: 1
           five_quantity: 132
@@ -2109,29 +2111,29 @@ components:
           description: The name of the operator on the FuelStation
         opt_id:
           type: integer
-          description: 'The ID of the OPT (Self) '
+          description: "The ID of the OPT (Self) "
         five_quantity:
           type: integer
-          description: 'Quantity of 5€ banknotes added to/removed from the safe '
+          description: "Quantity of 5€ banknotes added to/removed from the safe "
         ten_quantity:
           type: integer
-          description: 'Quantity of 10€ banknotes added to/removed from the safe '
+          description: "Quantity of 10€ banknotes added to/removed from the safe "
         twenty_quantity:
           type: integer
-          description: 'Quantity of 20€ banknotes added to/removed from the safe '
+          description: "Quantity of 20€ banknotes added to/removed from the safe "
         fifty_quantity:
           type: integer
-          description: 'Quantity of 50€ banknotes added to/removed from the safe '
+          description: "Quantity of 50€ banknotes added to/removed from the safe "
         one_hundred_quantity:
           type: integer
           x-stoplight:
             id: 1z8daqwb4k3vg
-          description: 'Quantity of 100€ banknotes added to/removed from the safe '
+          description: "Quantity of 100€ banknotes added to/removed from the safe "
         two_hundred_quantity:
           type: integer
           x-stoplight:
             id: fcll9e251ns1f
-          description: 'Quantity of 200€ banknotes added to/removed from the safe '
+          description: "Quantity of 200€ banknotes added to/removed from the safe "
         total:
           type: integer
           description: The total of the cash added to/removed from the safe
@@ -2183,7 +2185,7 @@ components:
         Example 1:
           message: The incoming token has expired
       title: API-GW-Def-Response-401
-      description: ''
+      description: ""
     Price:
       type: object
       x-examples:
@@ -2191,11 +2193,11 @@ components:
           fuel_station_id: 1160
           prices:
             - day_id: 11316
-              price_level: '1'
+              price_level: "1"
               product_id: 4
               product_name: Gasolio Spec.
               new_price: 2.149
-              change_price_date: '2024-09-25T09:06:11+02:00'
+              change_price_date: "2024-09-25T09:06:11+02:00"
           vendor: gilbarco
           is_code: IB200332
       properties:
@@ -2206,7 +2208,7 @@ components:
           type: array
           items:
             type: object
-            $ref: '#/components/schemas/PriceValues'
+            $ref: "#/components/schemas/PriceValues"
         vendor:
           type: string
           description: |
@@ -2221,11 +2223,11 @@ components:
       x-examples:
         Example 1:
           day_id: 11316
-          price_level: '1'
+          price_level: "1"
           product_id: 4
           product_name: Gasolio Spec.
           new_price: 2.149
-          change_price_date: '2024-09-25T09:06:11+02:00'
+          change_price_date: "2024-09-25T09:06:11+02:00"
       properties:
         day_id:
           type: integer
@@ -2252,7 +2254,7 @@ components:
           description: The old price that was changed
         new_price:
           type: number
-          description: 'The new price '
+          description: "The new price "
         change_price_date:
           type: string
           description: The date of the price change
@@ -2261,11 +2263,11 @@ components:
       type: object
       x-examples:
         Example 1:
-          date: '2024-09-12T17:06:10+02:00'
-          option_1: '2024-09-12 17:04:49'
+          date: "2024-09-12T17:06:10+02:00"
+          option_1: "2024-09-12 17:04:49"
           option_2: Pompa n.3
           option_3: N. TRANS. 98790
-          option_4: 'Importo: 30'
+          option_4: "Importo: 30"
       title: Alarm Input
       properties:
         alarm_id:
@@ -2302,8 +2304,8 @@ components:
       type: object
       x-examples:
         Example 1:
-          '636200': UTA
-          '636201': UTA
+          "636200": UTA
+          "636201": UTA
       additionalProperties:
         x-stoplight:
           id: 7suoz3iw7ntby
@@ -2357,7 +2359,7 @@ components:
           x-stoplight:
             id: a6qs9kpjg0nn1
           additionalProperties:
-            $ref: '#/components/schemas/SupplyInformations'
+            $ref: "#/components/schemas/SupplyInformations"
         remains_to_pay:
           type: object
           x-stoplight:
@@ -2377,7 +2379,7 @@ components:
           x-stoplight:
             id: 7o6jz4at74tbt
           additionalProperties:
-            $ref: '#/components/schemas/SupplyInformations'
+            $ref: "#/components/schemas/SupplyInformations"
         operative_modes_settings:
           type: object
           x-stoplight:
@@ -2422,12 +2424,12 @@ components:
           type: boolean
           x-stoplight:
             id: tjl6zd0j4so4g
-          description: 'If enabled, we read the value of the mechanical totalizers on the FuelStation'
+          description: "If enabled, we read the value of the mechanical totalizers on the FuelStation"
         read_all_no_tanks:
           type: boolean
           x-stoplight:
             id: 91kb3c6k5s7va
-          description: 'If enabled, we collect data for every entity except for tanks'
+          description: "If enabled, we collect data for every entity except for tanks"
         read_tanks:
           type: boolean
           x-stoplight:
