@@ -11,10 +11,146 @@ servers:
   - url: "https://mxp-datacollection-api.dev.icadsistemi.com/api/v2"
     description: development
 paths:
-  /totalizers:
+  /alarms:
     post:
       tags:
-        - Totalizers
+        - Alarms
+      responses:
+        "200":
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "401":
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: tt9tfii7iw9sg
+      operationId: post-alarm
+      summary: Send Alarms
+      description: API used to send alarm from the FuelStation
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Alarm"
+  /closes/day:
+    post:
+      tags:
+        - Closes
+      responses:
+        "200":
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "401":
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "504":
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+      x-stoplight:
+        id: 6q8pbofh07pak
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Closes"
+        description: The body is an array of closes to add
+      description: API to add a day closes to the Overview Database.
+      operationId: post-day-closes
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+      summary: Create a day close
+      security:
+        - Cognito: []
+  /closes/day/midnight:
+    post:
+      tags:
+        - Closes
       responses:
         "200":
           description: 200 response
@@ -54,16 +190,17 @@ paths:
       security:
         - Cognito: []
       x-stoplight:
-        id: 2wmy1ew3cii5f
-      summary: Add Totalizers data
-      operationId: post-totalizers
+        id: 56flerq4oc2wv
       requestBody:
         content:
           application/json:
             schema:
               type: array
               items:
-                $ref: "#/components/schemas/Totalizer"
+                $ref: "#/components/schemas/Closes"
+        description: The body is an array of closes to add
+      description: API to add a midnight closes to the Overview Database.
+      operationId: post-midnight-closes
       parameters:
         - schema:
             type: string
@@ -81,9 +218,183 @@ paths:
           in: header
           name: x-dc-version
           description: Client version
-      description: "API used to add totalizers data. It uses the Turn ID to decide whatever it's a day totalizer or a turn totalizer. If the totalizer doesn't exists on Overview Database, it will be created."
+      summary: Create a midnight close
+  /closes/turn:
+    post:
+      tags:
+        - Closes
+      responses:
+        "200":
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "401":
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "504":
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: 5lw9frmk82ts4
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Closes"
+        description: The body is an array of closes to add
+      operationId: post-turn-closes
+      summary: Create a turn close
+      description: API to add a turn closes to the Overview Database.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+  /fuelstations:
+    get:
+      responses:
+        "200":
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  x-stoplight:
+                    id: wf3ta79dn39vp
+                  type: object
+                  properties:
+                    is_code:
+                      type: string
+                      x-stoplight:
+                        id: mb3kr9yc1lwj4
+                    host:
+                      type: string
+                      x-stoplight:
+                        id: 8mkk1d1y5t4x4
+        "422":
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: f43q8gcyft7y9
+      summary: Get FuelStation List
+      operationId: get-fuelstations
+      description: Get the FuelStation List based on automation. It automatically filter the automation when the login username is one of our microservices.
+      requestBody:
+        content: {}
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: automation
+  /health:
+    head:
+      tags:
+        - Management
+      responses:
+        "200":
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                x-examples:
+                  Example 1:
+                    statusCode: 200
+      x-stoplight:
+        id: v3s5g79bzmqol
+      summary: Health Check
+      operationId: head-health
+      description: |-
+        API without security check just for checking connection with the API Server.
+
+        No body is requested
+  /manage/configuration:
+    post:
+      tags:
+        - Management
+      responses:
+        "200":
+          description: 200 response
+          content: {}
+        "401":
+          description: 401 response
+          content: {}
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: madlv757508jm
+      summary: Send Configuration
+      operationId: post-configuration
+      description: It saves the configuration of the FuelStation as a JSON on our block storage. The object name will be the ISCode read in the token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+        description: The configuration changes between every DC Client so we don't check the JSON but we save everything we receive.
   /manage/prices:
     get:
+      tags:
+        - Management
       responses:
         "200":
           description: 200 response
@@ -162,6 +473,8 @@ paths:
       operationId: get-manage-prices
       description: API to retrieve the prices to activate on the FuelStation. The ISCode of FuelStation is read from the token
     put:
+      tags:
+        - Management
       responses:
         "200":
           description: 200 response
@@ -239,8 +552,10 @@ paths:
                           - ERROR
 
                           Everything else will be treated as error.
-  /startup/products:
-    post:
+  /manage/whattodo:
+    get:
+      tags:
+        - Management
       responses:
         "200":
           description: 200 response
@@ -248,30 +563,220 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties:
-                  $ref: "#/components/schemas/Product"
-        "404":
-          description: Not Found. Deprecated in newer versions
-        "422":
-          description: Unprocessable Entity (WebDAV)
+                $ref: "#/components/schemas/WhatToDo"
+        "401":
+          description: 401 response
+          content: {}
+        "403":
+          description: 403 response
+          content: {}
       security:
         - Cognito: []
       x-stoplight:
-        id: gt3b2wtt6ppx2
-      summary: Get Product informations
-      operationId: post-startup-products
-      description: API to retrive products informations. It takes a body with a dictionary string/string taking the ID of the product as key and the PC Description as value. The response is a dictionary with the same key but with the object product as value.
+        id: u7cqiw2srxa2r
+      summary: Get Whattodo File
+      operationId: get-whattodo
+      description: 'API to retrieve the "what-to-do" file. It''s a JSON on our block storage with the name {iscode}.json. The ISCode is read from the authentication token.'
+  /prices:
+    post:
+      tags:
+        - Prices
+      responses:
+        "200":
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "401":
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "504":
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: xnzn6ldh606w2
+      operationId: post-price
+      summary: Add Price informations
+      description: "API used to send informations about price change, also used to send those informations to Italian Government."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Price"
+  /prices/history:
+    post:
+      tags:
+        - Prices
+      responses:
+        "200":
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "401":
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "504":
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: h0v40t2nvxlfp
+      operationId: post-price-history
+      summary: Add Price History informations
+      description: API used to send informations about price changes and store them in an historical order.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/PriceValues"
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+  /remains:
+    post:
+      tags:
+        - Remains
+      responses:
+        "200":
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "401":
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "504":
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: fpc5lgokt0958
+      summary: Create remains
+      operationId: post-remains
+      description: API used to create remains informations or update them with a refund
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
       requestBody:
         content:
           application/json:
             schema:
               type: object
               additionalProperties:
-                x-stoplight:
-                  id: omklwj5phk7gb
-                type: string
+                $ref: "#/components/schemas/Remain"
+        description: The body is a key/value dictionary where the key is the ID of the remain
   "/remains/{remain_code}":
     get:
+      tags:
+        - Remains
       parameters:
         - name: remain_code
           in: path
@@ -338,8 +843,181 @@ paths:
       summary: Get Remain Code
       operationId: get-remain-code
       description: API to retrieve the remains associated to a specific remain code. It takes as input the remain code as path parameters and the ISCode from the token or the header.
+  /self/empty:
+    post:
+      tags:
+        - Self
+      responses:
+        "200":
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "401":
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "504":
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: yo7zf1yonip2y
+      summary: Add Self informations
+      operationId: post-self
+      description: "API used to add information about self's operation like cash in (money added) or empty self (money removed). "
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Self"
+ 
+  /startup/cards:
+    get:
+      tags:
+        - Startup
+      responses:
+        "200":
+          description: 200 response
+          content: {}
+        "401":
+          description: 401 response
+          content: {}
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: tai9hwmav17ln
+      summary: Get Cards IIN
+      operationId: get-cards
+      description: API to retrieve cards' IINs in order to match them to the right issuer.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Cards"
+  /startup/informations:
+    get:
+      tags:
+        - Startup
+      responses:
+        "200":
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Startup-Informations"
+        "401":
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: sif76xthdbeya
+      summary: Get FuelStation Informations
+      operationId: get-final-informations
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-fuelstation-code
+          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: user-agent
+          description: Usually the combination of client/version
+        - schema:
+            type: string
+          in: header
+          name: x-dc-version
+          description: Client version
+      description: API used to retrieve various informations about the FuelStation. It reads the FuelStation's code from token or the header x-fuelstation-code.
+  /startup/internationalcards:
+    get:
+      tags:
+        - Startup
+      responses:
+        "200":
+          description: 200 response
+          content: {}
+        "401":
+          description: 401 response
+          content: {}
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: 7a000fieyxkcu
+      operationId: get-int-cards
+      summary: Get Cards IIN
+      deprecated: true
+      description: OLD API to retrieve cards' IINs in order to match them to the right issuer. Replaced by /cards because now it also contains cards that are not international.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Cards"
   /startup/logs:
     get:
+      tags:
+        - Startup
       responses:
         "200":
           description: 200 response
@@ -363,8 +1041,43 @@ paths:
       operationId: get-startup-logs
       summary: Get Log API Key
       description: API used to retrieve DataDog API Key
+  /startup/products:
+    post:
+      tags:
+        - Startup
+      responses:
+        "200":
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: "#/components/schemas/Product"
+        "404":
+          description: Not Found. Deprecated in newer versions
+        "422":
+          description: Unprocessable Entity (WebDAV)
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: gt3b2wtt6ppx2
+      summary: Get Product informations
+      operationId: post-startup-products
+      description: API to retrive products informations. It takes a body with a dictionary string/string taking the ID of the product as key and the PC Description as value. The response is a dictionary with the same key but with the object product as value.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                x-stoplight:
+                  id: omklwj5phk7gb
+                type: string
   /startup/pumps:
     get:
+      tags:
+        - Startup
       responses:
         "200":
           description: 200 response
@@ -436,6 +1149,8 @@ paths:
           description: Client version
       description: API used to retrieve all pumps linked to a FuelStation. The ISCode is taken from the token or from the header.
     post:
+      tags:
+        - Startup
       responses:
         "200":
           description: "200 response. The body is a dictionary of pumps_id/nozzle_id/PumpObject. "
@@ -491,6 +1206,8 @@ paths:
         description: "The body is a dictionary of pumps_id/nozzle_id/PumpObject. "
   "/startup/pumps/{pump_id}/nozzle/{nozzle_id}/product/{product_id}":
     get:
+      tags:
+        - Startup
       parameters:
         - name: pump_id
           in: path
@@ -554,31 +1271,10 @@ paths:
       operationId: get-pump-id
       summary: Get Pump ID
       description: "API used to retrieve the Overview ID of a pump linked to a FuelStation given its number, the nozzle ID and the product ID. The ISCode is taken from the token or from the header."
-  /startup/internationalcards:
-    get:
-      responses:
-        "200":
-          description: 200 response
-          content: {}
-        "401":
-          description: 401 response
-          content: {}
-      security:
-        - Cognito: []
-      x-stoplight:
-        id: 7a000fieyxkcu
-      operationId: get-int-cards
-      summary: Get Cards IIN
-      deprecated: true
-      description: OLD API to retrieve cards' IINs in order to match them to the right issuer. Replaced by /cards because now it also contains cards that are not international.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              $ref: "#/components/schemas/Cards"
   /supplies:
     post:
+      tags:
+        - Supplies
       responses:
         "200":
           description: 200 response
@@ -647,8 +1343,53 @@ paths:
       description: Send supplies to save on Overview Database
       security:
         - Cognito: []
-  /self/empty:
+  /supplies/paid:
+    get:
+      tags:
+        - Supplies
+      responses:
+        "200":
+          description: 200 response. The body is a key/value dictionary where the key is the ID of the supply.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: "#/components/schemas/Supply"
+        "401":
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+      x-stoplight:
+        id: t2w5lpn1drte4
+      summary: Get Paid Supplies
+      description: |-
+        API used to retrieve supplies paid with our POS. It reads the ISCODE used as input from the cognito token.
+
+        The output, if everything is okay, is the same map of supplies sent in the /supplies POST.
+      security:
+        - Cognito: []
+  /tanks:
     post:
+      tags:
+        - Tanks
       responses:
         "200":
           description: 200 response
@@ -688,10 +1429,16 @@ paths:
       security:
         - Cognito: []
       x-stoplight:
-        id: yo7zf1yonip2y
-      summary: Add Self informations
-      operationId: post-self
-      description: "API used to add information about self's operation like cash in (money added) or empty self (money removed). "
+        id: 2b0x7rc6eh475
+      operationId: post-tanks
+      summary: Add Tanks informations
+      description: "API used to send tanks' informations. If the tank doesn't exists on Overview Database, it will be created."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Tank"
       parameters:
         - schema:
             type: string
@@ -709,51 +1456,59 @@ paths:
           in: header
           name: x-dc-version
           description: Client version
+  /totalizers:
+    post:
+      tags:
+        - Totalizers
+      responses:
+        "200":
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "401":
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "422":
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "500":
+          description: 500 response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+        "504":
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/API-GW-Def-Response"
+      security:
+        - Cognito: []
+      x-stoplight:
+        id: 2wmy1ew3cii5f
+      summary: Add Totalizers data
+      operationId: post-totalizers
       requestBody:
         content:
           application/json:
             schema:
               type: array
               items:
-                $ref: "#/components/schemas/Self"
-  /alarms:
-    post:
-      responses:
-        "200":
-          description: 200 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "401":
-          description: 401 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "422":
-          description: Unprocessable Entity (WebDAV)
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "500":
-          description: 500 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-      security:
-        - Cognito: []
-      x-stoplight:
-        id: tt9tfii7iw9sg
-      operationId: post-alarm
-      summary: Send Alarms
-      description: API used to send alarm from the FuelStation
+                $ref: "#/components/schemas/Totalizer"
       parameters:
         - schema:
             type: string
@@ -771,349 +1526,11 @@ paths:
           in: header
           name: x-dc-version
           description: Client version
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/Alarm"
-  /remains:
-    post:
-      responses:
-        "200":
-          description: 200 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "401":
-          description: 401 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "422":
-          description: Unprocessable Entity (WebDAV)
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "500":
-          description: 500 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "504":
-          description: Gateway Timeout
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-      security:
-        - Cognito: []
-      x-stoplight:
-        id: fpc5lgokt0958
-      summary: Create remains
-      operationId: post-remains
-      description: API used to create remains informations or update them with a refund
-      parameters:
-        - schema:
-            type: string
-          in: header
-          name: x-fuelstation-code
-          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: user-agent
-          description: Usually the combination of client/version
-        - schema:
-            type: string
-          in: header
-          name: x-dc-version
-          description: Client version
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              additionalProperties:
-                $ref: "#/components/schemas/Remain"
-        description: The body is a key/value dictionary where the key is the ID of the remain
-  /startup/informations:
-    get:
-      responses:
-        "200":
-          description: 200 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/Startup-Informations"
-        "401":
-          description: 401 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-      security:
-        - Cognito: []
-      x-stoplight:
-        id: sif76xthdbeya
-      summary: Get FuelStation Informations
-      operationId: get-final-informations
-      parameters:
-        - schema:
-            type: string
-          in: header
-          name: x-fuelstation-code
-          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: user-agent
-          description: Usually the combination of client/version
-        - schema:
-            type: string
-          in: header
-          name: x-dc-version
-          description: Client version
-      description: API used to retrieve various informations about the FuelStation. It reads the FuelStation's code from token or the header x-fuelstation-code.
-  /manage/whattodo:
-    get:
-      responses:
-        "200":
-          description: 200 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/WhatToDo"
-        "401":
-          description: 401 response
-          content: {}
-        "403":
-          description: 403 response
-          content: {}
-      security:
-        - Cognito: []
-      x-stoplight:
-        id: u7cqiw2srxa2r
-      summary: Get Whattodo File
-      operationId: get-whattodo
-      description: 'API to retrieve the "what-to-do" file. It''s a JSON on our block storage with the name {iscode}.json. The ISCode is read from the authentication token.'
-  /closes/day:
-    post:
-      responses:
-        "200":
-          description: 200 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "401":
-          description: 401 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "422":
-          description: Unprocessable Entity (WebDAV)
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "500":
-          description: 500 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "504":
-          description: Gateway Timeout
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-      x-stoplight:
-        id: 6q8pbofh07pak
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/Closes"
-        description: The body is an array of closes to add
-      description: API to add a day closes to the Overview Database.
-      operationId: post-day-closes
-      parameters:
-        - schema:
-            type: string
-          in: header
-          name: x-fuelstation-code
-          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: user-agent
-          description: Usually the combination of client/version
-        - schema:
-            type: string
-          in: header
-          name: x-dc-version
-          description: Client version
-      summary: Create a day close
-      security:
-        - Cognito: []
-  /prices:
-    post:
-      responses:
-        "200":
-          description: 200 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "401":
-          description: 401 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "422":
-          description: Unprocessable Entity (WebDAV)
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "500":
-          description: 500 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "504":
-          description: Gateway Timeout
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-      security:
-        - Cognito: []
-      x-stoplight:
-        id: xnzn6ldh606w2
-      operationId: post-price
-      summary: Add Price informations
-      description: "API used to send informations about price change, also used to send those informations to Italian Government."
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              $ref: "#/components/schemas/Price"
-  /startup/cards:
-    get:
-      responses:
-        "200":
-          description: 200 response
-          content: {}
-        "401":
-          description: 401 response
-          content: {}
-      security:
-        - Cognito: []
-      x-stoplight:
-        id: tai9hwmav17ln
-      summary: Get Cards IIN
-      operationId: get-cards
-      description: API to retrieve cards' IINs in order to match them to the right issuer.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              $ref: "#/components/schemas/Cards"
-  /fuelstations:
-    get:
-      responses:
-        "200":
-          description: 200 response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  x-stoplight:
-                    id: wf3ta79dn39vp
-                  type: object
-                  properties:
-                    is_code:
-                      type: string
-                      x-stoplight:
-                        id: mb3kr9yc1lwj4
-                    host:
-                      type: string
-                      x-stoplight:
-                        id: 8mkk1d1y5t4x4
-        "422":
-          description: Unprocessable Entity (WebDAV)
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "500":
-          description: 500 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-      security:
-        - Cognito: []
-      x-stoplight:
-        id: f43q8gcyft7y9
-      summary: Get FuelStation List
-      operationId: get-fuelstations
-      description: Get the FuelStation List based on automation. It automatically filter the automation when the login username is one of our microservices.
-      requestBody:
-        content: {}
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: automation
+      description: "API used to add totalizers data. It uses the Turn ID to decide whatever it's a day totalizer or a turn totalizer. If the totalizer doesn't exists on Overview Database, it will be created."
   /totalizers/midnight:
     post:
+      tags:
+        - Totalizers
       responses:
         "200":
           description: 200 response
@@ -1181,370 +1598,6 @@ paths:
           name: x-dc-version
           description: Client version
       description: "API used to add midnight closes' totalizers data. If the totalizer doesn't exists on Overview Database, it will be created."
-  /closes/day/midnight:
-    post:
-      responses:
-        "200":
-          description: 200 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "401":
-          description: 401 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "422":
-          description: Unprocessable Entity (WebDAV)
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "500":
-          description: 500 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "504":
-          description: Gateway Timeout
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-      security:
-        - Cognito: []
-      x-stoplight:
-        id: 56flerq4oc2wv
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/Closes"
-        description: The body is an array of closes to add
-      description: API to add a midnight closes to the Overview Database.
-      operationId: post-midnight-closes
-      parameters:
-        - schema:
-            type: string
-          in: header
-          name: x-fuelstation-code
-          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: user-agent
-          description: Usually the combination of client/version
-        - schema:
-            type: string
-          in: header
-          name: x-dc-version
-          description: Client version
-      summary: Create a midnight close
-  /health:
-    head:
-      responses:
-        "200":
-          description: 200 response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  statusCode:
-                    type: integer
-                x-examples:
-                  Example 1:
-                    statusCode: 200
-      x-stoplight:
-        id: v3s5g79bzmqol
-      summary: Health Check
-      operationId: head-health
-      description: |-
-        API without security check just for checking connection with the API Server.
-
-        No body is requested
-  /supplies/paid:
-    get:
-      responses:
-        "200":
-          description: 200 response. The body is a key/value dictionary where the key is the ID of the supply.
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: "#/components/schemas/Supply"
-        "401":
-          description: 401 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "422":
-          description: Unprocessable Entity (WebDAV)
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "500":
-          description: 500 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-      x-stoplight:
-        id: t2w5lpn1drte4
-      summary: Get Paid Supplies
-      description: |-
-        API used to retrieve supplies paid with our POS. It reads the ISCODE used as input from the cognito token.
-
-        The output, if everything is okay, is the same map of supplies sent in the /supplies POST.
-      security:
-        - Cognito: []
-  /prices/history:
-    post:
-      responses:
-        "200":
-          description: 200 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "401":
-          description: 401 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "422":
-          description: Unprocessable Entity (WebDAV)
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "500":
-          description: 500 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "504":
-          description: Gateway Timeout
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-      security:
-        - Cognito: []
-      x-stoplight:
-        id: h0v40t2nvxlfp
-      operationId: post-price-history
-      summary: Add Price History informations
-      description: API used to send informations about price changes and store them in an historical order.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/PriceValues"
-      parameters:
-        - schema:
-            type: string
-          in: header
-          name: x-fuelstation-code
-          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: user-agent
-          description: Usually the combination of client/version
-        - schema:
-            type: string
-          in: header
-          name: x-dc-version
-          description: Client version
-  /manage/configuration:
-    post:
-      responses:
-        "200":
-          description: 200 response
-          content: {}
-        "401":
-          description: 401 response
-          content: {}
-      security:
-        - Cognito: []
-      x-stoplight:
-        id: madlv757508jm
-      summary: Send Configuration
-      operationId: post-configuration
-      description: It saves the configuration of the FuelStation as a JSON on our block storage. The object name will be the ISCode read in the token
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: {}
-        description: The configuration changes between every DC Client so we don't check the JSON but we save everything we receive.
-  /tanks:
-    post:
-      responses:
-        "200":
-          description: 200 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "401":
-          description: 401 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "422":
-          description: Unprocessable Entity (WebDAV)
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "500":
-          description: 500 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "504":
-          description: Gateway Timeout
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-      security:
-        - Cognito: []
-      x-stoplight:
-        id: 2b0x7rc6eh475
-      operationId: post-tanks
-      summary: Add Tanks informations
-      description: "API used to send tanks' informations. If the tank doesn't exists on Overview Database, it will be created."
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              $ref: "#/components/schemas/Tank"
-      parameters:
-        - schema:
-            type: string
-          in: header
-          name: x-fuelstation-code
-          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: user-agent
-          description: Usually the combination of client/version
-        - schema:
-            type: string
-          in: header
-          name: x-dc-version
-          description: Client version
-  /closes/turn:
-    post:
-      responses:
-        "200":
-          description: 200 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "401":
-          description: 401 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "422":
-          description: Unprocessable Entity (WebDAV)
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "500":
-          description: 500 response
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-        "504":
-          description: Gateway Timeout
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/API-GW-Def-Response"
-      security:
-        - Cognito: []
-      x-stoplight:
-        id: 5lw9frmk82ts4
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/Closes"
-        description: The body is an array of closes to add
-      operationId: post-turn-closes
-      summary: Create a turn close
-      description: API to add a turn closes to the Overview Database.
-      parameters:
-        - schema:
-            type: string
-          in: header
-          name: x-fuelstation-code
-          description: Fuel Station Code (ISCode) read when the username in the authentication token matches one of our software
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: user-agent
-          description: Usually the combination of client/version
-        - schema:
-            type: string
-          in: header
-          name: x-dc-version
-          description: Client version
 components:
   securitySchemes:
     Cognito:
